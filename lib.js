@@ -106,3 +106,25 @@ export async function combineTo721(owners, result) {
 
   return combined;
 }
+
+/**
+ * Group the result by a key
+ * @param {string} trait
+ * @param {any[]} result
+ */
+export async function groupBy(trait, combined) {
+  return combined.reduce((acc, nft) => {
+    const attribute = nft.metadata.attributes.find(
+      (a) => a.trait_type === trait
+    );
+    const key = attribute.value;
+
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+
+    acc[key].push(nft);
+
+    return acc;
+  }, {});
+}
