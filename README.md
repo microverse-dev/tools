@@ -22,8 +22,8 @@ NFT holders snapshot tools
 
 1. Clone repo.
 2. `$ pnpm install`
-3. `$ pnpm start` 🎉
-4. `$ less result/collection.json`
+3. `$ pnpm start`
+4. See `./result` directory. 🎉
 
 ## License
 
