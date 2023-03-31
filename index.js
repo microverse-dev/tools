@@ -1,5 +1,9 @@
 import fs from "fs";
-import { getNftsForCollection, getOwnerForCollection } from "./lib.js";
+import {
+  getNftsForCollection,
+  getOwnerForCollection,
+  format721,
+} from "./lib.js";
 import { intro, outro, text } from "@clack/prompts";
 
 async function main() {
@@ -16,13 +20,16 @@ async function main() {
 
   try {
     const owners = await getOwnerForCollection(contractAddress);
-    const result = await getNftsForCollection(contractAddress);
-
     console.log(owners);
+    // const result = await getNftsForCollection(contractAddress);
 
-    fs.writeFileSync("./result.json", JSON.stringify(result), "utf8");
+    // fs.writeFileSync(
+    //   "./result.json",
+    //   JSON.stringify(format(owners, result)),
+    //   "utf8"
+    // );
 
-    outro("done!\nSee: result.json");
+    // outro("done!\nSee: result.json");
   } catch (e) {
     console.error(e);
   }
