@@ -10,6 +10,9 @@ dependencies:
   alchemy-sdk:
     specifier: ^2.6.2
     version: 2.6.2
+  csv-writer:
+    specifier: ^1.6.0
+    version: 1.6.0
   dotenv:
     specifier: ^16.0.3
     version: 16.0.3
@@ -1383,6 +1386,10 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /csv-writer@1.6.0:
+    resolution: {integrity: sha512-NOx7YDFWEsM/fTRAJjRpPp8t+MKRVvniAg9wQlUKx20MFrPs73WLJhFf5iteqrxNYnsy924K3Iroh3yNHeYd2g==}
+    dev: false
 
   /d@1.0.1:
     resolution: {integrity: sha512-m62ShEObQ39CfralilEQRjH6oAMtNCV1xJyEx5LpRYUVN+EviphDgUc/F3hnYbADmkiNs67Y+3ylmlG7Lnu+FA==}

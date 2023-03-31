@@ -8,9 +8,19 @@ import {
   clear,
   writeCollectionResult,
   writeGroupByTraitResult,
+  writeCSV,
 } from "./utils.js";
-import { intro, outro, text, confirm, cancel, select } from "@clack/prompts";
+import {
+  intro,
+  outro,
+  text,
+  confirm,
+  cancel,
+  select,
+  spinner,
+} from "@clack/prompts";
 import { exit } from "node:process";
+import { setTimeout } from "timers/promises";
 
 async function main() {
   intro("NFT Collection snapshot");
@@ -46,23 +56,26 @@ async function main() {
     const combined = await combineTo721(owners, result);
 
     clear();
-    await writeCollectionResult(combined);
 
-    const useGroupByTrait = await confirm({
-      message: "Do you want to group by TRAIT?",
+    const trait = await select({
+      message: "What key do you use to group?",
+      options: result[0].metadata.attributes.map((a) => ({
+        value: a.trait_type,
+        label: a.trait_type,
+      })),
     });
 
-    if (useGroupByTrait) {
-      const trait = await select({
-        message: "What key do you use to group?",
-        options: result[0].metadata.attributes.map((a) => ({
-          value: a.trait_type,
-          label: a.trait_type,
-        })),
-      });
+    const s = spinner();
+    s.start("Exporting...");
 
-      await writeGroupByTraitResult(trait, combined);
-    }
+    await Promise.all([
+      writeCollectionResult(combined),
+      writeGroupByTraitResult(trait, combined),
+      writeCSV(trait, owners, combined),
+    ]);
+    s.stop();
+
+    await setTimeout(1000);
 
     outro("Done!🎉 See result directory.");
   } catch (e) {
