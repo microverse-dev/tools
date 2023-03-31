@@ -1,7 +1,6 @@
 import { Network, Alchemy } from "alchemy-sdk";
 import { spinner } from "@clack/prompts";
 import * as dotenv from "dotenv";
-import { setTimeout } from "timers/promises";
 
 /**
  * @typedef { import("alchemy-sdk").Nft } Nft
@@ -16,31 +15,54 @@ const settings = {
   network: Network.ETH_MAINNET,
 };
 const alchemy = new Alchemy(settings);
-const result = [];
+
+export async function getCollectionInfo(contractAddress) {
+  s.start("Fetching collection info");
+  const res = await alchemy.nft.getContractMetadata(contractAddress);
+  s.stop("Done.");
+
+  return res;
+}
 
 /**
  * Get all NFTs for a collection
  * @param {string} contractAddress
- * @param {string | undefined} prevPageKey
+ * @param {string | undefined} prevToken
  * @returns Promise<Nft[]>
  */
-export async function getNftsForCollection(contractAddress, prevPageKey) {
+export async function getNftsForCollection(
+  contractAddress,
+  prevToken,
+  prevData = []
+) {
+  let result = prevData;
   s.start("Fetching 100 NFTs");
-  const { nfts, pageKey } = await alchemy.nft.getNftsForContract(
+
+  const searchParams = new URLSearchParams({
     contractAddress,
-    { pageKey: prevPageKey, pageSize: 100 }
+    withMetadata: true,
+  });
+
+  if (prevToken != null) {
+    searchParams.append("startToken", prevToken);
+  }
+
+  const res = await fetch(
+    `https://eth-mainnet.g.alchemy.com/nft/v2/${
+      settings.apiKey
+    }/getNFTsForCollection?${searchParams.toString()}`
   );
+  const { nfts, nextToken } = await res.json();
 
-  result.push(...nfts);
+  result = result.concat(nfts);
 
-  s.stop(`Done. Current result: ${result.length}. Next cursor: ${pageKey}`);
+  s.stop(`Done. Current result: ${result.length}. Next cursor: ${nextToken}`);
 
-  if (pageKey == null) {
+  if (nextToken == null) {
     return result;
   }
 
-  await setTimeout(500);
-  await getNftsForCollection(contractAddress, pageKey);
+  return await getNftsForCollection(contractAddress, nextToken, result);
 }
 
 /**
@@ -62,16 +84,25 @@ export async function getOwnerForCollection(contractAddress) {
  * @returns ?[] TODO: Fix type
  */
 export async function combineTo721(owners, result) {
-  return result.map((nft) => {
+  const combined = [];
+
+  for (const nft of result) {
+    const holders = [];
+
     for (const owner of owners) {
+      // Assuming ERC721, so I don't see b.balance.
       const flat = owner.tokenBalances.map((b) => b.tokenId);
-      // In ERC721, there is only one owner, so it is returned in an array of length 1.
+
       if (flat.includes(nft.id.tokenId)) {
-        return {
-          ...nft,
-          owners: [owner.ownerAddress],
-        };
+        holders.push(owner.ownerAddress);
       }
     }
-  });
+
+    combined.push({
+      ...nft,
+      owners: holders,
+    });
+  }
+
+  return combined;
 }
