@@ -3,6 +3,11 @@ import { spinner } from "@clack/prompts";
 import * as dotenv from "dotenv";
 import { setTimeout } from "timers/promises";
 
+/**
+ * @typedef { import("alchemy-sdk").Nft } Nft
+ * @typedef { import("alchemy-sdk").NftContractOwner } NftContractOwner
+ */
+
 dotenv.config();
 
 const s = spinner();
@@ -17,7 +22,7 @@ const result = [];
  * Get all NFTs for a collection
  * @param {string} contractAddress
  * @param {string | undefined} prevPageKey
- * @returns Nft[]
+ * @returns Promise<Nft[]>
  */
 export async function getNftsForCollection(contractAddress, prevPageKey) {
   s.start("Fetching 100 NFTs");
@@ -41,7 +46,7 @@ export async function getNftsForCollection(contractAddress, prevPageKey) {
 /**
  * Get all owners for a collection
  * @param {string} contractAddress
- * @returns string[]
+ * @returns Promise<NftContractOwner[]>
  */
 export async function getOwnerForCollection(contractAddress) {
   const { owners } = await alchemy.nft.getOwnersForContract(contractAddress, {
@@ -54,7 +59,7 @@ export async function getOwnerForCollection(contractAddress) {
  * Combine the results of RESULT and OWNERS in a way that corresponds to 721.
  * @param {string[]} owners
  * @param {Nft[]} result
- * @returns Nft[]
+ * @returns ?[] TODO: Fix type
  */
 export async function combineTo721(owners, result) {
   return result.map((nft) => {

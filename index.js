@@ -2,7 +2,7 @@ import fs from "fs";
 import {
   getNftsForCollection,
   getOwnerForCollection,
-  format721,
+  combineTo721,
 } from "./lib.js";
 import { intro, outro, text } from "@clack/prompts";
 
@@ -20,16 +20,16 @@ async function main() {
 
   try {
     const owners = await getOwnerForCollection(contractAddress);
-    console.log(owners);
-    // const result = await getNftsForCollection(contractAddress);
+    const result = await getNftsForCollection(contractAddress);
 
-    // fs.writeFileSync(
-    //   "./result.json",
-    //   JSON.stringify(format(owners, result)),
-    //   "utf8"
-    // );
+    fs.writeFileSync(
+      "./result.json",
+      // TODO: now supports only ERC721
+      JSON.stringify(combineTo721(owners, result)),
+      "utf8"
+    );
 
-    // outro("done!\nSee: result.json");
+    outro("done!\nSee: result.json");
   } catch (e) {
     console.error(e);
   }
