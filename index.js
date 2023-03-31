@@ -1,11 +1,15 @@
-import fs from "fs-extra";
 import {
   getCollectionInfo,
   getNftsForCollection,
   getOwnerForCollection,
   combineTo721,
 } from "./lib.js";
-import { intro, outro, text, confirm, cancel } from "@clack/prompts";
+import {
+  clear,
+  writeCollectionResult,
+  writeGroupByTraitResult,
+} from "./utils.js";
+import { intro, outro, text, confirm, cancel, select } from "@clack/prompts";
 import { exit } from "node:process";
 
 async function main() {
@@ -39,14 +43,26 @@ async function main() {
       return;
     }
 
-    fs.removeSync("result");
-    fs.mkdirSync("result");
-    fs.writeFileSync(
-      "result/collection.json",
-      // TODO: now supports only ERC721
-      JSON.stringify(await combineTo721(owners, result)),
-      "utf8"
-    );
+    const combined = await combineTo721(owners, result);
+
+    clear();
+    await writeCollectionResult(combined);
+
+    const useGroupByTrait = await confirm({
+      message: "Do you want to group by TRAIT?",
+    });
+
+    if (useGroupByTrait) {
+      const trait = await select({
+        message: "What key do you use to group?",
+        options: result[0].metadata.attributes.map((a) => ({
+          value: a.trait_type,
+          label: a.trait_type,
+        })),
+      });
+
+      await writeGroupByTraitResult(trait, combined);
+    }
 
     outro("Done!🎉 See result directory.");
   } catch (e) {

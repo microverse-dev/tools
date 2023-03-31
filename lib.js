@@ -117,7 +117,7 @@ export async function groupBy(trait, combined) {
     const attribute = nft.metadata.attributes.find(
       (a) => a.trait_type === trait
     );
-    const key = attribute.value;
+    const key = attribute?.value ?? "Unknown";
 
     if (!acc[key]) {
       acc[key] = [];
