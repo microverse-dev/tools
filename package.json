@@ -1,0 +1,24 @@
+{
+  "name": "snapshot-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@clack/core": "^0.3.2",
+    "@clack/prompts": "^0.6.3",
+    "alchemy-sdk": "^2.6.2",
+    "dotenv": "^16.0.3",
+    "ethers": "^6.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "prettier": "^2.8.7"
+  }
+}
