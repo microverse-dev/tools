@@ -1,5 +1,11 @@
 # snapshot-cli
 
+🚧 This library is still alpha version! (active development)
+
+```
+- only Ethereum Mainnet
+```
+
 NFT holders snapshot tools
 
 <p align="center">
@@ -20,10 +26,11 @@ NFT holders snapshot tools
 
 ## Getting Started
 
-1. Clone repo.
-2. `$ pnpm install`
-3. `$ pnpm start`
-4. See `./result` directory. 🎉
+1. Get [Alchemy API Key](https://docs.alchemy.com/docs/alchemy-quickstart-guide)
+2. Clone repo.
+3. `$ pnpm install`
+4. `$ pnpm start`
+5. See `./result` directory. 🎉
 
 ## License
 

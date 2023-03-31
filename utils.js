@@ -50,16 +50,33 @@ export async function writeCSV(trait, owners, combined) {
   for await (const key of Object.keys(grouped)) {
     const csvWriter = createObjectCsvWriter({
       path: `result/${key}.csv`,
-      header: [{ id: "owner", title: "address" }],
+      header: [
+        { id: "owner", title: "address" },
+        { id: "balance", title: "balance" },
+      ],
     });
 
-    const records = grouped[key].reduce((acc, cur) => {
+    const groupedBalance = grouped[key].reduce((acc, cur) => {
       if (cur.owners.length === 0) return;
 
-      acc.push(...cur.owners);
-      return acc;
-    }, []);
+      const { owners } = cur;
 
-    await csvWriter.writeRecords(records.map((owner) => ({ owner })));
+      for (const owner of owners) {
+        const { owner: ownerAddress, balance } = owner;
+
+        acc[ownerAddress] = acc[ownerAddress]
+          ? acc[ownerAddress] + balance
+          : balance;
+      }
+
+      return acc;
+    }, {});
+
+    const records = Object.keys(groupedBalance).map((o) => ({
+      owner: o,
+      balance: groupedBalance[o],
+    }));
+
+    await csvWriter.writeRecords(records);
   }
 }

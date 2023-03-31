@@ -2,7 +2,7 @@ import {
   getCollectionInfo,
   getNftsForCollection,
   getOwnerForCollection,
-  combineTo721,
+  combine,
 } from "./lib.js";
 import {
   clear,
@@ -53,7 +53,7 @@ async function main() {
       return;
     }
 
-    const combined = await combineTo721(owners, result);
+    const combined = await combine(owners, result);
 
     clear();
 

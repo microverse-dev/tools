@@ -47,6 +47,8 @@ export async function getNftsForCollection(
     searchParams.append("startToken", prevToken);
   }
 
+  // We want metadata information, so we use the REST API.
+  // ref: https://docs.alchemy.com/reference/getnftsforcollection
   const res = await fetch(
     `https://eth-mainnet.g.alchemy.com/nft/v2/${
       settings.apiKey
@@ -83,18 +85,20 @@ export async function getOwnerForCollection(contractAddress) {
  * @param {Nft[]} result
  * @returns ?[] TODO: Fix type
  */
-export async function combineTo721(owners, result) {
+export async function combine(owners, result) {
   const combined = [];
 
   for (const nft of result) {
     const holders = [];
 
     for (const owner of owners) {
-      // Assuming ERC721, so I don't see b.balance.
-      const flat = owner.tokenBalances.map((b) => b.tokenId);
-
-      if (flat.includes(nft.id.tokenId)) {
-        holders.push(owner.ownerAddress);
+      for (const tokenBalance of owner.tokenBalances) {
+        if (tokenBalance.tokenId === nft.id.tokenId) {
+          holders.push({
+            owner: owner.ownerAddress,
+            balance: tokenBalance.balance,
+          });
+        }
       }
     }
 
