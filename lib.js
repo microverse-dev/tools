@@ -1,13 +1,10 @@
 import { Network, Alchemy } from "alchemy-sdk";
 import { spinner } from "@clack/prompts";
-import * as dotenv from "dotenv";
 
 /**
  * @typedef { import("alchemy-sdk").Nft } Nft
  * @typedef { import("alchemy-sdk").NftContractOwner } NftContractOwner
  */
-
-dotenv.config();
 
 const s = spinner();
 const settings = {

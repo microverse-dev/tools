@@ -17,7 +17,6 @@
     "@clack/prompts": "^0.6.3",
     "alchemy-sdk": "^2.6.2",
     "csv-writer": "^1.6.0",
-    "dotenv": "^16.0.3",
     "fs-extra": "^11.1.1"
   },
   "devDependencies": {

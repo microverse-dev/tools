@@ -29,7 +29,7 @@ NFT holders snapshot tools
 1. Get [Alchemy API Key](https://docs.alchemy.com/docs/alchemy-quickstart-guide)
 2. Clone repo.
 3. `$ pnpm install`
-4. `$ pnpm start`
+4. `$ env ALCHEMY_API_KEY=xxx pnpm start`
 5. See `./result` directory. 🎉
 
 ## License
