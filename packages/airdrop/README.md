@@ -1,0 +1,5 @@
+# airdrop cli
+
+Types
+
+- CryptoPokers
