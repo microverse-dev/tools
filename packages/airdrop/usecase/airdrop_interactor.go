@@ -30,7 +30,7 @@ func (adi *AirdropInteractor) Start() error {
 	}
 
 	// get owner address
-	address, err := ethutil.GetWalletAddress(adi.app.Config.WalletSecretKey)
+	wallet, err := ethutil.NewWallet(adi.app.Config.WalletSecretKey, *adi.app)
 	if err != nil {
 		return err
 	}
@@ -41,7 +41,7 @@ func (adi *AirdropInteractor) Start() error {
 	// call alchemy api
 	alchemyClient := alchemy.NewClient(adi.app.Config.RpcUrl)
 	res, err := alchemyClient.GetNFTs(ctx, alchemy.GetNFTsRequest{
-		Owner:           *address,
+		Owner:           wallet.Address.Hex(),
 		ContractAddress: adi.app.Config.ContractAddress,
 	})
 	if err != nil {
@@ -75,12 +75,35 @@ func (adi *AirdropInteractor) Start() error {
 	// chance to cancel
 	time.Sleep(3 * time.Second)
 
+	type Result struct {
+		txHash *string
+		err    error
+	}
+	var result []Result
 	for i, target := range targets {
 		tokenId := tokenIdList[i]
-		fmt.Println("[", i+1, "]", "sending NFT to", target, "tokenId is", tokenId, "by", *address)
+		fmt.Println("[", i+1, "]", "sending NFT to", target, "tokenId is", tokenId, "by", wallet.Address.Hex())
+		txHash, err := wallet.Transfer(adi.app.Config.ContractAddress, target, tokenId)
+		result = append(result, Result{
+			txHash: txHash,
+			err:    err,
+		})
 
 		// トランザクションが詰まるので、1秒待つ
 		time.Sleep(1 * time.Second)
+	}
+
+	for i, v := range result {
+		fmt.Println("=====")
+		fmt.Println(i)
+
+		if v.err != nil {
+			fmt.Println(v.err)
+		}
+
+		if v.txHash == nil {
+			fmt.Println(v)
+		}
 	}
 
 	return nil

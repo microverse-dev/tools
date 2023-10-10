@@ -4,10 +4,19 @@ import (
 	"crypto/ecdsa"
 	"errors"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/microverse-dev/tools/packages/airdrop/di"
 )
 
-func GetWalletAddress(privateHexKey string) (*string, error) {
+type Wallet struct {
+	Address    common.Address
+	Client     *ethclient.Client
+	privateKey *ecdsa.PrivateKey
+}
+
+func NewWallet(privateHexKey string, app di.App) (*Wallet, error) {
 	privateKey, err := crypto.HexToECDSA(privateHexKey)
 	if err != nil {
 		return nil, err
@@ -19,7 +28,14 @@ func GetWalletAddress(privateHexKey string) (*string, error) {
 		return nil, errors.New("error casting public key to ECDSA")
 	}
 
-	address := crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
+	client, err := ethclient.Dial(app.Config.RpcUrl)
+	if err != nil {
+		return nil, err
+	}
 
-	return &address, nil
+	return &Wallet{
+		Address:    crypto.PubkeyToAddress(*publicKeyECDSA),
+		Client:     client,
+		privateKey: privateKey,
+	}, nil
 }
