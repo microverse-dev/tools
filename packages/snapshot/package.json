@@ -1,5 +1,5 @@
 {
-  "name": "snapshot-cli",
+  "name": "snapshot",
   "version": "0.0.0",
   "description": "nft snapshot cli tool",
   "type": "module",
