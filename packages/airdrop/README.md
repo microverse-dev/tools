@@ -7,6 +7,7 @@
 ## support method
 
 - ERC721A safeTransferFrom
+- ERC721A BalanceOf
 
 ## CSV Structure
 
