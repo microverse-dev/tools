@@ -5,7 +5,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/microverse-dev/tools/packages/airdrop/gateway/onchain/CryptoPokers"
+	"github.com/microverse-dev/tools/packages/airdrop/gateway/onchain/ERC721A"
 )
 
 func (wallet *Wallet) Transfer(contractAddress string, toAddress string, tokenId int64) (*string, error) {
@@ -16,7 +16,7 @@ func (wallet *Wallet) Transfer(contractAddress string, toAddress string, tokenId
 	}
 
 	address := common.HexToAddress(contractAddress)
-	instance, err := CryptoPokers.NewCryptoPokers(address, wallet.Client)
+	instance, err := ERC721A.NewERC721A(address, wallet.Client)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (wallet *Wallet) Transfer(contractAddress string, toAddress string, tokenId
 
 func (wallet *Wallet) BalanceOf(contractAddress string, ownerAddress string) (*big.Int, error) {
 	address := common.HexToAddress(contractAddress)
-	instance, err := CryptoPokers.NewCryptoPokers(address, wallet.Client)
+	instance, err := ERC721A.NewERC721A(address, wallet.Client)
 	if err != nil {
 		return big.NewInt(0), err
 	}

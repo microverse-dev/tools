@@ -4,9 +4,9 @@
 
 - Ethereum mainnet
 
-## support types
+## support method
 
-- CryptoPokers
+- ERC721A safeTransferFrom
 
 ## CSV Structure
 
