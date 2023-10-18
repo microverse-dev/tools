@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"strconv"
 	"time"
@@ -23,8 +24,17 @@ func NewAirdropInteractor(app *di.App) *AirdropInteractor {
 }
 
 func (adi *AirdropInteractor) Start() error {
+	// get flag
+	var isDryRun = flag.Bool("dryrun", true, "dry run")
+	flag.Parse()
+
+	fmt.Printf("dry run: %t\n", *isDryRun)
+	if *isDryRun {
+		fmt.Println("if you want to send NFT, please add `--dryrun=false` option")
+	}
+
 	// read csv
-	targets, err := csv.ReadCsv()
+	targets, err := csv.ReadCsv("list.csv")
 	if err != nil {
 		return err
 	}
@@ -63,46 +73,39 @@ func (adi *AirdropInteractor) Start() error {
 		tokenIdList = append(tokenIdList, tokenId)
 	}
 
+	var totalAmount int
+	for _, target := range targets {
+		totalAmount += target.Amount
+	}
+
+	fmt.Println("total transaction count:", totalAmount)
+
 	// check stock
-	if len(tokenIdList) < len(targets) {
+	if len(tokenIdList) < totalAmount {
 		return fmt.Errorf("stock is not enough")
 	}
 
-	// show targets length and tokenIdList length
-	fmt.Println("targets length is", len(targets))
-	fmt.Println("tokenIdList length is", len(tokenIdList))
+	var index int
+	for _, target := range targets {
+		for j := 0; j < target.Amount; j++ {
+			tokenId := tokenIdList[index]
+			fmt.Println("[", index+1, "]", "sending NFT to", target.WalletAddress, "tokenId is", tokenId, "by", wallet.Address.Hex())
 
-	// chance to cancel
-	time.Sleep(3 * time.Second)
+			if !*isDryRun {
+				txHash, err := wallet.Transfer(adi.app.Config.ContractAddress, target.WalletAddress, tokenId)
+				if err != nil {
+					fmt.Println("error", err.Error())
+				}
 
-	type Result struct {
-		txHash *string
-		err    error
-	}
-	var result []Result
-	for i, target := range targets {
-		tokenId := tokenIdList[i]
-		fmt.Println("[", i+1, "]", "sending NFT to", target, "tokenId is", tokenId, "by", wallet.Address.Hex())
-		txHash, err := wallet.Transfer(adi.app.Config.ContractAddress, target, tokenId)
-		result = append(result, Result{
-			txHash: txHash,
-			err:    err,
-		})
+				if txHash != nil {
+					fmt.Println("txHash", *txHash)
+				}
 
-		// トランザクションが詰まるので、1秒待つ
-		time.Sleep(1 * time.Second)
-	}
+				// トランザクションが詰まるので、1秒待つ
+				time.Sleep(1 * time.Second)
+			}
 
-	for i, v := range result {
-		fmt.Println("=====")
-		fmt.Println(i)
-
-		if v.err != nil {
-			fmt.Println(v.err)
-		}
-
-		if v.txHash == nil {
-			fmt.Println(v)
+			index++
 		}
 	}
 

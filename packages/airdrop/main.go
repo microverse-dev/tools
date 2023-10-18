@@ -21,9 +21,16 @@ func run(ctx context.Context) error {
 		return err
 	}
 
+	// list balanceOf <contract address> addresses
+	// interactor := usecase.NewBalanceOfInteractor(app)
+	// err = interactor.Start()
+	// if err != nil {
+	// 	return err
+	// }
+
 	// airdrop
-	airdrop := usecase.NewAirdropInteractor(app)
-	err = airdrop.Start()
+	interactor := usecase.NewAirdropInteractor(app)
+	err = interactor.Start()
 	if err != nil {
 		return err
 	}

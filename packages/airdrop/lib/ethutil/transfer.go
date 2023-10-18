@@ -31,3 +31,19 @@ func (wallet *Wallet) Transfer(contractAddress string, toAddress string, tokenId
 
 	return &txAddress, nil
 }
+
+func (wallet *Wallet) BalanceOf(contractAddress string, ownerAddress string) (*big.Int, error) {
+	address := common.HexToAddress(contractAddress)
+	instance, err := CryptoPokers.NewCryptoPokers(address, wallet.Client)
+	if err != nil {
+		return big.NewInt(0), err
+	}
+
+	owner := common.HexToAddress(ownerAddress)
+	balanceOf, err := instance.BalanceOf(nil, owner)
+	if err != nil {
+		return big.NewInt(0), err
+	}
+
+	return balanceOf, nil
+}

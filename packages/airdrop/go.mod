@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/google/wire v0.5.0
+	github.com/jszwec/csvutil v1.8.0
 	github.com/kelseyhightower/envconfig v1.4.0
 )
 
@@ -14,6 +15,7 @@ require (
 	github.com/VictoriaMetrics/fastcache v1.6.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bits-and-blooms/bitset v1.5.0 // indirect
+	github.com/btcsuite/btcd v0.22.0-beta // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.2.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/cockroachdb/errors v1.8.1 // indirect
