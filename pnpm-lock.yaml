@@ -33,8 +33,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       alchemy-sdk:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^3.0.0
+        version: 3.0.0
       csv-writer:
         specifier: ^1.6.0
         version: 1.6.0
@@ -1084,8 +1084,8 @@ packages:
     resolution: {integrity: sha512-H7wUZRn8WpTq9jocdxQ2c8x2sKo9ZVmzfRE13GiNJXfp7NcKYEdvl3vspKjXox6RIG2VtaRe4JFvxG4rqp2Zuw==}
     dev: false
 
-  /alchemy-sdk@2.6.2:
-    resolution: {integrity: sha512-wJhoessaINiysxECTsJNQ7maj37wQA0Pj6gZcTa0R3t3mXljQ5BeC61E5jnmnIdY1g/kM8zT+6jdaBliHxBGqA==}
+  /alchemy-sdk@3.0.0:
+    resolution: {integrity: sha512-mTvL9+ly55dz2h+/qElLNy2KM6yJY15bAHr7HCCaYquIYpdBHd1kKSosFBUKRGpWECngFoq+ZF+78hmEPMrZkw==}
     dependencies:
       '@ethersproject/abi': 5.7.0
       '@ethersproject/abstract-provider': 5.7.0
