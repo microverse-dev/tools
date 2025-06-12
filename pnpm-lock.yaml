@@ -30,8 +30,8 @@ importers:
         specifier: ^0.3.2
         version: 0.3.2
       '@clack/prompts':
-        specifier: ^0.7.0
-        version: 0.7.0
+        specifier: ^0.11.0
+        version: 0.11.0
       alchemy-sdk:
         specifier: ^2.6.2
         version: 2.6.2
@@ -392,22 +392,20 @@ packages:
       sisteransi: 1.0.5
     dev: false
 
-  /@clack/core@0.3.3:
-    resolution: {integrity: sha512-5ZGyb75BUBjlll6eOa1m/IZBxwk91dooBWhPSL67sWcLS0zt9SnswRL0l26TVdBhb0wnWORRxUn//uH6n4z7+A==}
+  /@clack/core@0.5.0:
+    resolution: {integrity: sha512-p3y0FIOwaYRUPRcMO7+dlmLh8PSRcrjuTndsiA0WAFbWES0mLZlrjVoBRZ9DzkPFJZG6KGkJmoEAY0ZcVWTkow==}
     dependencies:
       picocolors: 1.0.0
       sisteransi: 1.0.5
     dev: false
 
-  /@clack/prompts@0.7.0:
-    resolution: {integrity: sha512-0MhX9/B4iL6Re04jPrttDm+BsP8y6mS7byuv0BvXgdXhbV5PdlsHt55dvNsuBCPZ7xq1oTAOOuotR9NFbQyMSA==}
+  /@clack/prompts@0.11.0:
+    resolution: {integrity: sha512-pMN5FcrEw9hUkZA4f+zLlzivQSeQf5dRGJjSUbvVYDLvpKCdQx5OaknvKzgbtXOizhP+SJJJjqEbOe55uKKfAw==}
     dependencies:
-      '@clack/core': 0.3.3
+      '@clack/core': 0.5.0
       picocolors: 1.0.0
       sisteransi: 1.0.5
     dev: false
-    bundledDependencies:
-      - is-unicode-supported
 
   /@ethersproject/abi@5.7.0:
     resolution: {integrity: sha512-351ktp42TiRcYB3H1OP8yajPeAQstMW/yCFokj/AthP9bLHzQFPlOrxOcwYEDkUAICmOHljvN4K39OMTMUa9RA==}
